@@ -1,0 +1,13 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "db/queries"
+    schema: "db/schema"
+    gen:
+      go:
+        package: "queries"
+        sql_package: "pgx/v5"
+        out: "internal/sqlcDB"
+        overrides:
+          - db_type: "pg_catalog.timestamp"
+            go_type: "time.Time"
