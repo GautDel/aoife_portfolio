@@ -70,7 +70,6 @@ func New() chi.Router {
         log.Fatal("Database URL does not exist...")
     }
 
-
 	ctx := context.Background()
 
 	pool, err := db.NewConn(ctx, DBUrl)
@@ -84,23 +83,8 @@ func New() chi.Router {
 	}
 
 	// Create version control for router
-	v1r := chi.NewRouter()
-     Admin(r, app, cfg)
-
-	// Mount which version of router we want
-	r.Mount("/v1", v1r)
-
-	// Routes
-	v1r.Get("/", GetMainPage)
-
-    
-
-
-    ////// GET \\\\\\
-    v1r.Get("/navitem", cfg.GetNavItems)
-    v1r.Get("/user", cfg.GetUser)
-    v1r.Get("/users", cfg.GetUsers)
-    v1r.Get("/signin", cfg.SignIn)
+    Admin(r, app, cfg)
+    V1(r, cfg)
 
 	return r
 }
