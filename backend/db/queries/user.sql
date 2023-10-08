@@ -29,6 +29,17 @@ SET username = $1, updated_at = $2
 WHERE username = $3
 RETURNING username;
 
--- name: DeleteUser :exec
+-- name: DeleteUser :one
 DELETE FROM users 
-WHERE username = $1;
+WHERE username = $1
+RETURNING username;
+
+-- name: LoginUser :exec
+UPDATE users 
+SET session_id = $1
+WHERE username = $2;
+
+-- LogoutUser :exec
+UPDATE users
+SET session_id = $1
+WHERE username = $2;

@@ -2,29 +2,27 @@ package handlers
 
 import (
 	"am_server/connection"
-    "encoding/gob"
 	"context"
 	"fmt"
 	"log"
 	"os"
-
+    
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/jackc/pgx/v5/pgxpool"
-    "github.com/gorilla/sessions"
+    ory "github.com/ory/client-go"
 )
 
 type connPool struct {
 	DB *pgxpool.Pool
 }
 
-func RestAPI() chi.Router {
+type App struct {
+    ory *ory.APIClient
+}
 
-	DBUrl := os.Getenv("DB_URL")
-	if DBUrl == "" {
-		log.Fatal("Database URL does not exist...")
-	}
+func New() chi.Router {
 
 	// Create new router
 	r := chi.NewRouter()
@@ -33,40 +31,46 @@ func RestAPI() chi.Router {
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		AllowedHeaders:   []string{
+            "Accept", 
+            "Authorization", 
+            "Content-Type", 
+            "X-CSRF-Token",
+        },
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,
 		MaxAge:           300,
 	}))
 
-    gob.Register(map[string]interface{}{})
-
-    os.Setenv("SESSION_KEY", secureCookie.GenerateRandomKey(32))
-    var store = sessions.NewCookieStore([]byte(os.Getenv("SESSION_KEY")))
-
-    session, err := store.Get(r, "session-name")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+    r.Use(middleware.Logger)
+    r.Use(middleware.RequestID)
+    r.Use(middleware.RealIP)
+    r.Use(middleware.Recoverer)
 
 
 
-    // Set some session values.
-	session.Values["foo"] = "bar"
-	session.Values[42] = 43
-	// Save it before we write to the response/return from the handler.
-	err = session.Save(r, w)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+    // ORY Initialisation
+    proxyPort := os.Getenv("PROXY_PORT")
+    if proxyPort == "" {
+        log.Fatal("Ory proxy port does not exist...")
+    }
+
+    config := ory.NewConfiguration()
+    config.Servers = ory.ServerConfigurations{
+        {URL: fmt.Sprintf("http://localhost:%s/.ory", os.Getenv("PROXY_PORT"))},
+    }
+
+    app := &App{
+        ory: ory.NewAPIClient(config),
+    }
+
+	// Connect to Database
+    DBUrl := os.Getenv("DB_URL")
+    if DBUrl == "" {
+        log.Fatal("Database URL does not exist...")
     }
 
 
-	r.Use(middleware.Logger)
-
-
-	// Connect to Database
 	ctx := context.Background()
 
 	pool, err := db.NewConn(ctx, DBUrl)
@@ -81,6 +85,7 @@ func RestAPI() chi.Router {
 
 	// Create version control for router
 	v1r := chi.NewRouter()
+     Admin(r, app, cfg)
 
 	// Mount which version of router we want
 	r.Mount("/v1", v1r)
@@ -88,22 +93,14 @@ func RestAPI() chi.Router {
 	// Routes
 	v1r.Get("/", GetMainPage)
 
-	// Nav item
-	v1r.Get("/navitem", cfg.GetNavItems)
-	v1r.Post("/navitem", cfg.CreateNavItems)
-	v1r.Delete("/navitem", cfg.DeleteNavItems)
-	v1r.Put("/navitem", cfg.UpdateNavItem)
-  v1r.Get("/user", cfg.GetUser)
-  v1r.Get("/users", cfg.GetUsers)
-  v1r.Post("/users", cfg.CreateUser)
+    
 
 
-
-	v1r.Put("/updatepassword", cfg.UpdateUserPassword)
-	v1r.Put("/updateusername", cfg.UpdateUserUsername)
-
-  v1r.Post("/signin", cfg.SignIn)
-  v1r.Get("/signin", cfg.SignIn)
+    ////// GET \\\\\\
+    v1r.Get("/navitem", cfg.GetNavItems)
+    v1r.Get("/user", cfg.GetUser)
+    v1r.Get("/users", cfg.GetUsers)
+    v1r.Get("/signin", cfg.SignIn)
 
 	return r
 }

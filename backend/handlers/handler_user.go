@@ -5,10 +5,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"os"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // //// GET ALL USERS \\\\\\
@@ -32,6 +33,10 @@ func (p *connPool) GetUser(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
 		Username string `json:"username"`
 	}
+    type msg struct {
+
+        Msg string `json:"message"`
+    }
 
 	params := parameters{}
 	err := json.NewDecoder(r.Body).Decode(&params)
@@ -39,16 +44,18 @@ func (p *connPool) GetUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error parsing JSON:", err)
 		return
 	}
-	ctx := context.Background()
+    session, err := json.Marshal(getSession(r.Context()))
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    fmt.Printf("session info: %v \n", string(session))
 
-	q := queries.New(p.DB)
+    message := msg{}
+    message.Msg =  "You have logged in"
 
-	user, err := q.GetUser(ctx, params.Username)
-	if err != nil {
-		fmt.Println("Couldn't delete nav item:", err)
-	}
 
-	JSONRes(w, 200, user)
+    JSONRes(w, 200,  message.Msg)
 }
 
 // //// CREATE A USER \\\\\\
@@ -64,13 +71,13 @@ func (p *connPool) CreateUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error parsing JSON:", err)
 		return
 	}
-
+    
 	// Password hashing
 	bytes, err := bcrypt.GenerateFromPassword([]byte(params.Password), 14)
 	if err != nil {
 		fmt.Printf("Something went wrong with password creation %v", err)
 	}
-
+    
 	hashed := string(bytes)
 
 	ctx := context.Background()
@@ -83,6 +90,11 @@ func (p *connPool) CreateUser(w http.ResponseWriter, r *http.Request) {
 		Username:  params.Username,
 		Password:  hashed,
 	})
+
+    if err != nil {
+		fmt.Println("Couldn't delete nav item:", err)
+	}
+
 
 	JSONRes(w, 200, user)
 }
