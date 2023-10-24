@@ -1,11 +1,11 @@
 package main
 
 import (
-    "log"
-    "net/http"
-    "os"
-    "am_server/handlers"
-    "github.com/joho/godotenv"
+	"am_server/handlers"
+	"log"
+	"net/http"
+	"os"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -23,6 +23,6 @@ func main() {
     }
 
     log.Printf("Server listening on port %v...", port)
-
     log.Fatal(s.ListenAndServe())
 }
+

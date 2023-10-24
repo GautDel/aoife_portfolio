@@ -1,16 +1,16 @@
 package handlers
 
 import (
-    "github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5"
 )
 
-func  Admin(r chi.Router,  app *App, cfg connPool) chi.Router {
+func  Admin(r chi.Router, cfg connPool) chi.Router {
 
     a := chi.NewRouter()
 
     r.Mount("/admin", a)
 
-    a.Use(app.sessionMiddleware)
+    a.Use(cfg.AuthMiddleware)
 
 
     ////// GET \\\\\\

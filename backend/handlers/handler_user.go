@@ -24,7 +24,7 @@ func (p *connPool) GetUsers(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(os.Stderr, "Cannot retrieve users %v", err)
 		return
 	}
-
+    
 	JSONRes(w, 200, users)
 }
 
@@ -44,18 +44,7 @@ func (p *connPool) GetUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error parsing JSON:", err)
 		return
 	}
-    session, err := json.Marshal(getSession(r.Context()))
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
-    fmt.Printf("session info: %v \n", string(session))
-
-    message := msg{}
-    message.Msg =  "You have logged in"
-
-
-    JSONRes(w, 200,  message.Msg)
+    
 }
 
 // //// CREATE A USER \\\\\\
@@ -84,7 +73,7 @@ func (p *connPool) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	q := queries.New(p.DB)
 
-	user, err := q.CreateUser(ctx, queries.CreateUserParams{
+		user, err := q.CreateUser(ctx, queries.CreateUserParams{
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 		Username:  params.Username,
