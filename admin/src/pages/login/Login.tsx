@@ -27,7 +27,7 @@ const Login = () => {
     useEffect(() => {
         async function isLoggedIn() {
           try {
-            const res = await fetch("http://192.168.1.15:8080/admin/users", {
+            const res = await fetch("http://192.168.1.15:8080/admin/login", {
                                 method: "GET",
                                 headers: {
                                     "content-type": "application/json"
@@ -95,7 +95,7 @@ const Login = () => {
                             left-2/4
                             bg-slate-700
                             -translate-x-2/4
-                            -translate-y-2/4
+   ./ui/pages/.html                         -translate-y-2/4
                             overflow-hidden" >
 
                 <h1 className="text-white

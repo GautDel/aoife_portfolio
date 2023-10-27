@@ -1,0 +1,16 @@
+{{define "dashboard"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../../ui/dist/htmx.min.js"></script>
+    <link href="../../ui/dist/output.css" rel="stylesheet">
+    <title>Dashboard</title>
+</head>
+<body>
+    <p>Welcome to the dashboard</p>
+    <button hx-post="/v1/logout">Logout</button>
+</body>
+</html>
+{{end}}

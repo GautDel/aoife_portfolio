@@ -4,23 +4,27 @@ import (
     "github.com/go-chi/chi/v5"
 )
 
-func  V1(r chi.Router, cfg connPool) chi.Router {
+func  V1(r chi.Router, cfg config) chi.Router {
 
     v1 := chi.NewRouter()
 
     r.Mount("/v1", v1)
 
+    v1.Use(cfg.AuthMiddleware)
 
     ////// GET \\\\\\
     v1.Get("/navitem", cfg.GetNavItems)
     v1.Get("/user", cfg.GetUser)
     v1.Get("/users", cfg.GetUsers)
-    v1.Get("/signin", cfg.SignIn)
 
     ////// POST \\\\\\
     v1.Post("/navitem", cfg.CreateNavItems)
     v1.Post("/user", cfg.CreateUser)
-    v1.Post("/signin", cfg.SignIn)
+
+    ////// AUTH \\\\\\
+    v1.Post("/login", cfg.Login)
+    v1.Post("/logout", cfg.Logout)
+
 
     ////// PUT \\\\\\
     v1.Put("/navitem", cfg.UpdateNavItem)

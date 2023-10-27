@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+
 	"github.com/joho/godotenv"
 )
 
@@ -21,7 +22,6 @@ func main() {
         Addr:    ":" + port,
         Handler: handlers.New(),
     }
-
     log.Printf("Server listening on port %v...", port)
     log.Fatal(s.ListenAndServe())
 }

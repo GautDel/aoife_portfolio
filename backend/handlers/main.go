@@ -6,14 +6,18 @@ import (
 	"fmt"
 	"log"
 	"os"
+    "net/http"
     
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/jackc/pgx/v5/pgxpool"
+    "github.com/gorilla/sessions"
 )
 
-type connPool struct {
+
+type config struct {
+    Store *sessions.CookieStore
 	DB *pgxpool.Pool
 }
 
@@ -21,6 +25,9 @@ func New() chi.Router {
 
 	// Create new router
 	r := chi.NewRouter()
+
+    // Allows us to serve up tailwind css and htmx files
+    fs := http.FileServer(http.Dir("ui/dist"))
 
 	// Implement CORS
 	r.Use(cors.Handler(cors.Options{
@@ -41,6 +48,8 @@ func New() chi.Router {
     r.Use(middleware.RequestID)
     r.Use(middleware.RealIP)
     r.Use(middleware.Recoverer)
+    
+    r.Handle("/ui/dist/*", http.StripPrefix("/ui/dist/", fs))
 
 	// Connect to Database
     DBUrl := os.Getenv("DB_URL")
@@ -56,7 +65,12 @@ func New() chi.Router {
 	}
 
 	// Use struct to pass global connection to handlers
-	cfg := connPool{
+    sessionKey := os.Getenv("SESSION_KEY")
+    if sessionKey == "" {
+        log.Fatal("Session Key does not exist. FIX ASAP")
+    }
+	cfg := config{
+        Store: sessions.NewCookieStore([]byte(sessionKey)),
 		DB: pool,
 	}
 

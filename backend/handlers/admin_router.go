@@ -4,34 +4,18 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func  Admin(r chi.Router, cfg connPool) chi.Router {
+func Admin(r chi.Router, cfg config) chi.Router {
 
-    a := chi.NewRouter()
+	a := chi.NewRouter()
 
-    r.Mount("/admin", a)
+	r.Mount("/admin", a)
 
     a.Use(cfg.AuthMiddleware)
 
 
-    ////// GET \\\\\\
-    a.Get("/navitem", cfg.GetNavItems)
-    a.Get("/user", cfg.GetUser)
-    a.Get("/users", cfg.GetUsers)
-    a.Get("/signin", cfg.SignIn)
+	////// UI \\\\\\
+	a.Get("/login", Login)
+    a.Get("/dashboard", Dashboard)
 
-    ////// POST \\\\\\
-    a.Post("/navitem", cfg.CreateNavItems)
-    a.Post("/user", cfg.CreateUser)
-    a.Post("/signin", cfg.SignIn)
-
-    ////// PUT \\\\\\
-    a.Put("/navitem", cfg.UpdateNavItem)
-    a.Put("/updatepassword", cfg.UpdateUserPassword)
-    a.Put("/updateusername", cfg.UpdateUserUsername)
-
-    ////// DELETE \\\\\\
-    a.Delete("/navitem", cfg.DeleteNavItems)
-    a.Delete("/user", cfg.DeleteUser)
-
-    return r
+	return r
 }
