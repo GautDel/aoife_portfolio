@@ -14,6 +14,7 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
         "./ui/pages/sidenavButton.html",
         "./ui/pages/datacontainer.html",
         "./ui/pages/dataItem.html",
+        "./ui/pages/viewDataItem.html",
         "./ui/pages/postForm.html",
         "./ui/pages/putForm.html",
         "./ui/pages/deletePrompt.html",
