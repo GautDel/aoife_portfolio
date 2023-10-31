@@ -9,8 +9,8 @@ import (
 	"context"
 )
 
-const createNavItem = `-- name: CreateNavItem :one
-INSERT INTO nav_item (
+const createPage = `-- name: CreatePage :one
+INSERT INTO pages (
   name,
   item_order,
   item_show
@@ -20,15 +20,15 @@ INSERT INTO nav_item (
 RETURNING id, name, item_show, item_order
 `
 
-type CreateNavItemParams struct {
+type CreatePageParams struct {
 	Name      string
 	ItemOrder int32
 	ItemShow  bool
 }
 
-func (q *Queries) CreateNavItem(ctx context.Context, arg CreateNavItemParams) (NavItem, error) {
-	row := q.db.QueryRow(ctx, createNavItem, arg.Name, arg.ItemOrder, arg.ItemShow)
-	var i NavItem
+func (q *Queries) CreatePage(ctx context.Context, arg CreatePageParams) (Page, error) {
+	row := q.db.QueryRow(ctx, createPage, arg.Name, arg.ItemOrder, arg.ItemShow)
+	var i Page
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
@@ -38,29 +38,31 @@ func (q *Queries) CreateNavItem(ctx context.Context, arg CreateNavItemParams) (N
 	return i, err
 }
 
-const deleteNavItem = `-- name: DeleteNavItem :exec
-DELETE FROM nav_item 
+const deletePage = `-- name: DeletePage :one
+DELETE FROM pages 
 WHERE name = $1
+RETURNING name
 `
 
-func (q *Queries) DeleteNavItem(ctx context.Context, name string) error {
-	_, err := q.db.Exec(ctx, deleteNavItem, name)
-	return err
+func (q *Queries) DeletePage(ctx context.Context, name string) (string, error) {
+	row := q.db.QueryRow(ctx, deletePage, name)
+	err := row.Scan(&name)
+	return name, err
 }
 
-const getNavItems = `-- name: GetNavItems :many
-SELECT id, name, item_show, item_order FROM nav_item
+const getPages = `-- name: GetPages :many
+SELECT id, name, item_show, item_order FROM pages
 `
 
-func (q *Queries) GetNavItems(ctx context.Context) ([]NavItem, error) {
-	rows, err := q.db.Query(ctx, getNavItems)
+func (q *Queries) GetPages(ctx context.Context) ([]Page, error) {
+	rows, err := q.db.Query(ctx, getPages)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []NavItem
+	var items []Page
 	for rows.Next() {
-		var i NavItem
+		var i Page
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -77,25 +79,28 @@ func (q *Queries) GetNavItems(ctx context.Context) ([]NavItem, error) {
 	return items, nil
 }
 
-const updateNavItem = `-- name: UpdateNavItem :exec
-UPDATE nav_item
+const updatePage = `-- name: UpdatePage :one
+UPDATE pages
 SET name = $1, item_order = $2, item_show = $3
 WHERE name = $4
+RETURNING name
 `
 
-type UpdateNavItemParams struct {
+type UpdatePageParams struct {
 	Name      string
 	ItemOrder int32
 	ItemShow  bool
 	Name_2    string
 }
 
-func (q *Queries) UpdateNavItem(ctx context.Context, arg UpdateNavItemParams) error {
-	_, err := q.db.Exec(ctx, updateNavItem,
+func (q *Queries) UpdatePage(ctx context.Context, arg UpdatePageParams) (string, error) {
+	row := q.db.QueryRow(ctx, updatePage,
 		arg.Name,
 		arg.ItemOrder,
 		arg.ItemShow,
 		arg.Name_2,
 	)
-	return err
+	var name string
+	err := row.Scan(&name)
+	return name, err
 }

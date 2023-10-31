@@ -9,6 +9,14 @@ import (
 func Dashboard(w http.ResponseWriter, r *http.Request) {
     files := []string{
         "./ui/pages/dashboard.html",
+        "./ui/pages/header.html",
+        "./ui/pages/sidenav.html",
+        "./ui/pages/sidenavButton.html",
+        "./ui/pages/datacontainer.html",
+        "./ui/pages/dataItem.html",
+        "./ui/pages/postForm.html",
+        "./ui/pages/putForm.html",
+        "./ui/pages/deletePrompt.html",
     }
 
     tmpl := template.Must(template.ParseFiles(files...))

@@ -13,12 +13,12 @@ func  V1(r chi.Router, cfg config) chi.Router {
     v1.Use(cfg.AuthMiddleware)
 
     ////// GET \\\\\\
-    v1.Get("/navitem", cfg.GetNavItems)
+    v1.Get("/pages", cfg.GetPages)
     v1.Get("/user", cfg.GetUser)
     v1.Get("/users", cfg.GetUsers)
 
     ////// POST \\\\\\
-    v1.Post("/navitem", cfg.CreateNavItems)
+    v1.Post("/page", cfg.CreatePage)
     v1.Post("/user", cfg.CreateUser)
 
     ////// AUTH \\\\\\
@@ -27,12 +27,12 @@ func  V1(r chi.Router, cfg config) chi.Router {
 
 
     ////// PUT \\\\\\
-    v1.Put("/navitem", cfg.UpdateNavItem)
+    v1.Put("/page", cfg.UpdatePage)
     v1.Put("/updatepassword", cfg.UpdateUserPassword)
     v1.Put("/updateusername", cfg.UpdateUserUsername)
 
     ////// DELETE \\\\\\
-    v1.Delete("/navitem", cfg.DeleteNavItems)
+    v1.Delete("/page", cfg.DeletePage)
     v1.Delete("/user", cfg.DeleteUser)
 
     return r

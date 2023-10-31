@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type NavItem struct {
+type Page struct {
 	ID        pgtype.UUID
 	Name      string
 	ItemShow  bool
@@ -23,5 +23,4 @@ type User struct {
 	Password  string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	SessionID string
 }

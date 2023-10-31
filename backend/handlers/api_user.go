@@ -27,18 +27,15 @@ func (c *config) GetUsers(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(os.Stderr, "Cannot retrieve users %v", err)
 		return
 	}
-    
-	JSONRes(w, 200, users)
+
+    fmt.Println(users)
 }
 
-////// GET A SINGLE USER \\\\\\
+////// GET A SINGLE USER UPDATE THIS\\\\\\
 func (c *config) GetUser(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
 		Username string `json:"username"`
 	}
-    type msg struct {
-        Msg string `json:"message"`
-    }
 
 	params := parameters{}
 	err := json.NewDecoder(r.Body).Decode(&params)
@@ -66,6 +63,7 @@ func (c *config) CreateUser(w http.ResponseWriter, r *http.Request) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(params.Password), 14)
 	if err != nil {
 		fmt.Printf("Something went wrong with password creation %v", err)
+        return
 	}
     
 	hashed := string(bytes)
@@ -82,11 +80,10 @@ func (c *config) CreateUser(w http.ResponseWriter, r *http.Request) {
 	})
 
     if err != nil {
-		fmt.Println("Couldn't delete nav item:", err)
+		fmt.Println("Couldn't create user", err)
 	}
-
-
-	JSONRes(w, 200, user)
+    
+    fmt.Printf("User created: %v", user.Username)
 }
 
 /////// LOGIN A USER \\\\\\
@@ -114,7 +111,7 @@ func (c *config) Login(w http.ResponseWriter, r *http.Request) {
     q := queries.New(c.DB) 
     user, err := q.Login(ctx, creds.Username)
     if err != nil {
-        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+        http.Error(w, "Wrong Credentials", http.StatusUnauthorized)
         return
     }
 
@@ -122,7 +119,7 @@ func (c *config) Login(w http.ResponseWriter, r *http.Request) {
         []byte(user.Password), 
         []byte(creds.Password))
     if err != nil {
-        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+        http.Error(w, "Wrong Credentials", http.StatusUnauthorized)
         return
     }
 
@@ -192,8 +189,9 @@ func (c *config) UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
 		Username:  params.Username,
 	})
 
-	JSONRes(w, 200, user)
+    fmt.Printf("Password changed for user: %v", user)
 }
+
 
 // //// UPDATE USER USERNAME \\\\\\
 func (c *config) UpdateUserUsername(w http.ResponseWriter, r *http.Request) {
@@ -219,7 +217,7 @@ func (c *config) UpdateUserUsername(w http.ResponseWriter, r *http.Request) {
 		Username_2: params.Username,
 	})
 
-	JSONRes(w, 200, user)
+    fmt.Printf("Username changed for user: %v", user)
 }
 
 // //// DELETE USER \\\\\\
@@ -238,10 +236,10 @@ func (c *config) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	q := queries.New(c.DB)
 
-	delErr := q.DeleteNavItem(ctx, params.Username)
-	if delErr != nil {
-		fmt.Println("Couldn't delete user:", delErr)
+	user, err := q.DeleteUser(ctx, params.Username)
+	if err != nil {
+		fmt.Println("Couldn't delete user %v", err)
 	}
 
-	JSONRes(w, 200, "Successfully deleted user")
+    fmt.Printf("User: %v deleted", user)
 }

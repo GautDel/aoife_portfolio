@@ -9,8 +9,36 @@
     <title>Dashboard</title>
 </head>
 <body>
-    <p>Welcome to the dashboard</p>
-    <button hx-post="/v1/logout">Logout</button>
+    <!--   {{template "putForm" .}}  -->
+    <!--   {{template "postForm" .}}  -->
+    <!--   {{template "deletePrompt" .}}  -->
+
+    <div class="flex 
+        flex-col
+        h-[90vh] 
+        border 
+        rounded-md
+        absolute
+        top-2/4
+        left-2/4
+        bg-slate-300
+        -translate-x-2/4
+        border-slate-800 
+        -translate-y-2/4
+        w-[80vw] 
+        z-0
+        overflow-hidden">
+
+        {{template "header" .}}
+
+        <div class="flex flex-row h-full">
+
+            {{template "sidenav" .}}
+
+            {{template "datacontainer" .}}
+
+        </div>
+    </div>
 </body>
 </html>
 {{end}}

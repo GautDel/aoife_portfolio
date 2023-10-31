@@ -1,8 +1,8 @@
--- name: GetNavItems :many
-SELECT * FROM nav_item;
+-- name: GetPages :many
+SELECT * FROM pages;
 
--- name: CreateNavItem :one
-INSERT INTO nav_item (
+-- name: CreatePage :one
+INSERT INTO pages (
   name,
   item_order,
   item_show
@@ -11,11 +11,13 @@ INSERT INTO nav_item (
 )
 RETURNING *;
 
--- name: UpdateNavItem :exec
-UPDATE nav_item
+-- name: UpdatePage :one
+UPDATE pages
 SET name = $1, item_order = $2, item_show = $3
-WHERE name = $4;
+WHERE name = $4
+RETURNING name;
 
--- name: DeleteNavItem :exec
-DELETE FROM nav_item 
-WHERE name = $1;
+-- name: DeletePage :one
+DELETE FROM pages 
+WHERE name = $1
+RETURNING name;

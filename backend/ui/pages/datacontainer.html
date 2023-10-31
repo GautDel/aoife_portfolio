@@ -1,0 +1,40 @@
+{{define "datacontainer"}}
+<div class="flex flex-col
+    bg-slate-100 
+    w-[70%] h-[94%]
+    m-auto pb-16 
+    rounded-lg drop-shadow-lg
+    overflow-y-scroll
+    ">
+
+    <p class="text-center text-3xl text-slate-800 font-semibold
+    py-4 mx-auto
+    border-b border-zinc-300
+    w-[90%]">Home</p>
+
+    <button class="w-10 h-10
+        bg-blue-600 
+        absolute top-4 right-8
+        rounded-full">
+        <p class="absolute top-2/4 -translate-y-2/4 left-2/4 -translate-x-2/4
+        pb-2
+        text-white text-4xl font-semibold leading-none">+</p>
+    </button>
+
+    <div class="flex justify-between
+        text-slate-600 font-semibold
+        mx-auto pt-3 px-6
+        w-[90%]">
+        <p>Name</p>
+        <p>Content</p>
+        <p>Placement</p>
+        <p>Actions</p>
+    </div>
+
+    {{template "dataItem" .}}
+    {{template "dataItem" .}}
+    {{template "dataItem" .}}
+    {{template "dataItem" .}}
+    {{template "dataItem" .}}
+</div>
+{{end}}

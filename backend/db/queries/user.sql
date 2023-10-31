@@ -34,17 +34,6 @@ DELETE FROM users
 WHERE username = $1
 RETURNING username;
 
--- name: SetSession :exec
-UPDATE users 
-SET session_id = $1
-WHERE username = $2;
-
 -- name: Login :one
 SELECT id, username, password FROM users
 WHERE username = $1;
-
-
--- LogoutUser :exec
-UPDATE users
-SET session_id = $1
-WHERE username = $2;

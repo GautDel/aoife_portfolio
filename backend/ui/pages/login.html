@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="../../ui/dist/htmx.min.js"></script>
+        <script src="../../ui/dist/resTargets.min.js"></script>
         <link href="../../ui/dist/output.css" rel="stylesheet">
         <title>Login</title>
     </head>
@@ -14,14 +15,14 @@
             w-[400px]
             border 
             px-4
-            pb-10
+            pb-12
             rounded-md
             content-center
             justify-center
             absolute
             top-2/4
             left-2/4
-            bg-slate-700
+            bg-slate-600
             -translate-x-2/4
             -translate-y-2/4
             overflow-hidden">
@@ -32,47 +33,58 @@
                 py-7
                 text-center">LOGIN</h1>
 
+            <div hx-ext="response-targets">
+                <form hx-post="/v1/login" 
+                    hx-target-401="#unauthorized"
+                    class="flex flex-col">
+                    <input type="text" 
+                    placeholder="username" 
+                    name="username"
+                    class="border-2 
+                    mb-6
+                    rounded-md 
+                    pl-2
+                    py-[0.35rem]
+                    bg-white
+                    text-lg
+                    text-slate-600
+                    focus:border-blue-600
+                    outline-none
+                    "/>
 
-            <form hx-post="/v1/login" class="flex flex-col">
-                <input type="text" 
-                placeholder="username" 
-                name="username"
-                class="border-2 
-                mb-4
-                rChangeounded-sm 
-                pl-2
-                py-[0.35rem]
-                bg-white
-                text-lg
-                text-slate-600
-                focus:border-emerald-600
-                outline-none
-                "/>
+                    <input type="password" 
+                    placeholder="password" 
+                    name="password"
+                    class="border-2 
+                    mb-6
+                    rounded-md 
+                    pl-2
+                    py-[0.35rem]
+                    bg-white
+                    text-lg
+                    text-slate-600
+                    focus:border-blue-600
+                    outline-none"/>
+                    <button type="submit"
+                        class="bg-blue-600
+                        hover:bg-blue-700
+                        w-[100%]
+                        rounded-full
+                        py-[0.6rem]
+                        font-semibold 
+                        text-white">LOGIN</button>
+                        <p id="unauthorized" 
+                            class="text-rose-500
+                            absolute
+                            left-2/4
+                            bottom-3
+                            -translate-x-2/4
+                            font-semibold"></p>
+                </form>
 
-                <input type="password" 
-                placeholder="password" 
-                name="password"
-                class="border-2 
-                mb-4
-                rChangeounded-sm 
-                pl-2
-                py-[0.35rem]
-                bg-white
-                text-lg
-                text-slate-600
-                focus:border-emerald-600
-                outline-none"/>
-                <button type="submit"
-                    class="bg-emerald-500
-                    hover:bg-emerald-600
-                    w-[100%]
-                    rounded-full
-                    py-[0.6rem]
-                    font-semibold 
-                    text-white">LOGIN</button>
 
-            </form>
 
+            </div>
         </div>
     </body>
 </html>

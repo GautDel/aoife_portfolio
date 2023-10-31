@@ -1,0 +1,68 @@
+{{define "deletePrompt"}}
+<div class="flex flex-col justify-center content-center
+absolute z-50 
+w-full h-full
+bg-[rgba(223,223,223,0.8)]">
+
+
+
+
+    <div class=" w-[50%] 
+        bg-slate-100
+        drop-shadow-lg
+        rounded-md
+        mx-auto px-6 pb-8"  >
+        <p class="text-center text-2xl text-slate-800 font-semibold
+        py-5 mx-auto mb-6
+        border-b
+        border-slate-400
+        ">Delete "Paragraph 1"</p>
+        <div class="mb-6">
+            <p class="italic">Are you sure you want to delete "Paragraph 1?"</p>
+            <p class="my-2"><span class="text-red-500 font-bold">Warning:</span> This could break your layout!</p>
+            <p>To proceed, type "<span class="text-red-500 font-bold">Paragraph 1</span>" omitting the quotes</p>
+        </div>
+
+        <input 
+        id="delete" 
+        type="text" 
+        name="delete"
+        placeholder="Your item to delete here..."
+        class="rounded-md 
+        w-full
+        pl-2 py-1 mb-5
+        bg-white focus:bg-neutral-100
+        drop-shadow-md
+        text-slate-800
+        outline-none"/>
+        <div class="flex justify-between">
+            <button type="submit"
+                class="bg-white hover:bg-neutral-100
+                w-[80%]
+                rounded-full
+                border
+                border-slate-800
+                py-[0.5rem] mr-6
+                font-semibold 
+                text-lg
+                drop-shadow-lg
+                text-slate-800">CANCEL</button>
+
+            <button type="submit"
+                class="bg-red-500 hover:bg-red-600
+                w-[80%]
+                rounded-full
+                py-[0.5rem]
+                font-bold 
+                text-lg
+                drop-shadow-lg
+                text-white">DELETE</button>
+
+
+
+
+        </div>
+
+    </div>
+</div>
+{{end}}

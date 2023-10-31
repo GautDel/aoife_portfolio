@@ -21,7 +21,7 @@ INSERT INTO users (
 ) VALUES (
   $1, $2, $3, $4 
 )
-RETURNING id, username, password, created_at, updated_at, session_id
+RETURNING id, username, password, created_at, updated_at
 `
 
 type CreateUserParams struct {
@@ -45,7 +45,6 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Password,
 		&i.CreatedAt,
 		&i.UpdatedAt,
-		&i.SessionID,
 	)
 	return i, err
 }
@@ -88,7 +87,7 @@ func (q *Queries) GetUser(ctx context.Context, username string) (GetUserRow, err
 }
 
 const getUsers = `-- name: GetUsers :many
-SELECT id, username, password, created_at, updated_at, session_id FROM users
+SELECT id, username, password, created_at, updated_at FROM users
 `
 
 func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
@@ -106,7 +105,6 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 			&i.Password,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.SessionID,
 		); err != nil {
 			return nil, err
 		}
@@ -134,22 +132,6 @@ func (q *Queries) Login(ctx context.Context, username string) (LoginRow, error) 
 	var i LoginRow
 	err := row.Scan(&i.ID, &i.Username, &i.Password)
 	return i, err
-}
-
-const setSession = `-- name: SetSession :exec
-UPDATE users 
-SET session_id = $1
-WHERE username = $2
-`
-
-type SetSessionParams struct {
-	SessionID string
-	Username  string
-}
-
-func (q *Queries) SetSession(ctx context.Context, arg SetSessionParams) error {
-	_, err := q.db.Exec(ctx, setSession, arg.SessionID, arg.Username)
-	return err
 }
 
 const updateUserPassword = `-- name: UpdateUserPassword :one

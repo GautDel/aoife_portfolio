@@ -1,0 +1,36 @@
+{{define "dataItem"}}
+<div class="flex justify-between 
+text-slate-800
+w-[90%] h-[3rem]
+rounded-sm
+drop-shadow-md
+overflow-hidden
+mx-auto my-4
+cursor-pointer
+px-4
+bg-white">
+
+    <p class="text-sm text-blue-600 font-bold
+    my-auto">Hero Text</p>
+
+    <p class="text-sm truncate text-slate-800 font-light
+    w-[20%]
+    my-auto">My name is Aoife, and I love cats. Hire me because I'm cool!</p>
+    <p class="text-sm text-slate-800 font-semibold 
+    my-auto">hero-text</p>
+    <div class="flex
+    my-auto">
+        <button class="rounded-l-full 
+            text-sm text-white font-bold
+            w-16
+            py-[0.2rem] mr-0
+            bg-yellow-400 hover:bg-yellow-500">EDIT</button>
+        <button class="rounded-r-full 
+            text-sm text-white font-bold
+            w-16
+            py-[0.1rem] pr-1
+            bg-red-500 hover:bg-red-600">DELETE</button>
+
+    </div>
+</div>
+{{end}}

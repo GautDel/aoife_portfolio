@@ -1,0 +1,15 @@
+{{define "header"}}
+<div class='bg-slate-800'>
+    <div class='text-white 
+        flex
+        px-8
+        justify-between
+        py-4 
+        font-semibold 
+        uppercase 
+        tracking-wider'>
+        <p>Aoife's Admin Panel</p>
+        <p class="cursor-pointer" hx-post="/v1/logout">Logout</p>
+    </div>
+</div>
+{{end}}
