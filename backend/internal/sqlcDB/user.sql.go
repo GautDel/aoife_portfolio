@@ -9,22 +9,24 @@ import (
 	"context"
 	"time"
 
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/google/uuid"
 )
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
+  id,
   created_at,
   updated_at,
   username,
   password
 ) VALUES (
-  $1, $2, $3, $4 
+  $1, $2, $3, $4, $5 
 )
 RETURNING id, username, password, created_at, updated_at
 `
 
 type CreateUserParams struct {
+	ID        uuid.UUID
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Username  string
@@ -33,6 +35,7 @@ type CreateUserParams struct {
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
 	row := q.db.QueryRow(ctx, createUser,
+		arg.ID,
 		arg.CreatedAt,
 		arg.UpdatedAt,
 		arg.Username,
@@ -122,7 +125,7 @@ WHERE username = $1
 `
 
 type LoginRow struct {
-	ID       pgtype.UUID
+	ID       uuid.UUID
 	Username string
 	Password string
 }

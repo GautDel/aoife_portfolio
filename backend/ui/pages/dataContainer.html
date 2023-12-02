@@ -1,0 +1,42 @@
+{{define "dataContainer"}}
+<div id="item-container" class="flex-col self-center
+    bg-slate-100 
+    w-[55vw] md:w-[55vw] lg:w-[50vw] 
+    h-[70vh] md:h-[70vh]
+    mx-auto pb-16 
+    rounded-lg drop-shadow-lg
+    overflow-y-hidden
+    ">
+
+    <p class="text-center text-xl md:text-2xl lg:text-3xl text-slate-800 font-semibold
+    py-4 mx-auto
+    border-b border-zinc-300
+    w-[90%]">{{.PageName}}</p>
+
+    <button name={{.PageName}} hx-get="/admin/postform" hx-target="body" hx-swap="beforeend" 
+        class="w-8 h-8 md:w-10 md:h-10
+        bg-blue-600 hover:bg-blue-700 
+        absolute top-4 md:top-3 right-6 md:right-8
+        drop-shadow-lg
+        rounded-full">
+        <p class="absolute top-2/4 -translate-y-2/4 left-2/4 -translate-x-2/4
+        pb-[0.4rem] md:pb-2
+        text-white text-3xl md:text-4xl font-semibold leading-none">+</p>
+    </button>
+
+    <div class="flex justify-between
+        text-slate-600 font-semibold text-sm
+        mx-auto pt-3 pb-5 px-6
+        w-[98%] md:w-[90%]">
+        <p>Name</p>
+        <p>Content</p>
+        <p>Placement</p>
+        <p>Actions</p>
+    </div>
+    <div class=" h-[80%] lg:h-[85%] 2xl:h-[90%] overflow-y-scroll">
+        {{range .Items}}
+            {{template "dataItem" .}}
+        {{end}}
+    </div>
+</div>
+{{end}}

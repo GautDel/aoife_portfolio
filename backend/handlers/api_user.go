@@ -3,13 +3,13 @@ package handlers
 import (
 	"am_server/internal/sqlcDB"
 	"context"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
 	"time"
 
+    "github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -28,7 +28,9 @@ func (c *config) GetUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-    fmt.Println(users)
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(users)
+
 }
 
 ////// GET A SINGLE USER UPDATE THIS\\\\\\
@@ -73,6 +75,7 @@ func (c *config) CreateUser(w http.ResponseWriter, r *http.Request) {
 	q := queries.New(c.DB)
 
 		user, err := q.CreateUser(ctx, queries.CreateUserParams{
+        ID: uuid.New(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 		Username:  params.Username,
@@ -132,7 +135,7 @@ func (c *config) Login(w http.ResponseWriter, r *http.Request) {
         SameSite: http.SameSiteStrictMode,
     }
 
-    session.Values["userID"] = hex.EncodeToString(user.ID.Bytes[:])  
+    session.Values["userID"] = user.ID.String()  
     sessErr := session.Save(r, w)
     if sessErr != nil {
         http.Error(w, sessErr.Error(), http.StatusInternalServerError)

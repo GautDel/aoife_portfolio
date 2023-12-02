@@ -1,13 +1,10 @@
 {{define "sidenavButton"}}
-<button class="w-40 
-    my-4 
-    py-2 
-    text-center 
-    uppercase
+<button name={{.Name}} hx-get="/v1/items" hx-target="#item-container" hx-swap="outerHTML" 
+    class="w-24 md:w-36 lg:w-40
+    my-4 py-2 
+    text-center text-white uppercase font-semibold
     rounded-md
     drop-shadow-lg
     cursor-pointer 
-    text-white 
-    bg-slate-900 hover:bg-slate-800 
-    font-semibold">Home</button>
+    bg-slate-900 hover:bg-slate-800">{{.Name}}</button>
 {{end}}

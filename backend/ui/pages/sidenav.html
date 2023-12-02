@@ -14,12 +14,13 @@
     border-b
     border-slate-500
     w-[98%]">PAGES</p>
-    {{template "sidenavButton" .}}
-    {{template "sidenavButton" .}}
-    {{template "sidenavButton" .}}
-    {{template "sidenavButton" .}}
-    {{template "sidenavButton" .}}
-    {{template "sidenavButton" .}}
+
+    {{range .Pages}}
+        {{template "sidenavButton" .}}
+    {{end}}
+
+
+
 </div>
 
 {{end}}

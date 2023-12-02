@@ -4,16 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
     <script src="../../ui/dist/htmx.min.js"></script>
+    <script src="../../ui/dist/resTargets.min.js"></script>
     <link href="../../ui/dist/output.css" rel="stylesheet">
     <title>Dashboard</title>
 </head>
 <body>
-    <!--   {{template "putForm" .}}  -->
-    <!--   {{template "postForm" .}}  -->
-    <!--   {{template "viewDataItem" .}}  -->
-    <!--   {{template "deletePrompt" .}}  -->
-
     <div class="flex 
         flex-col
         h-[90vh] 
@@ -36,7 +33,7 @@
 
             {{template "sidenav" .}}
 
-            {{template "datacontainer" .}}
+            {{template "dataContainer" .}}
 
         </div>
     </div>

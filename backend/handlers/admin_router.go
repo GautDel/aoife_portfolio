@@ -15,7 +15,12 @@ func Admin(r chi.Router, cfg config) chi.Router {
 
 	////// UI \\\\\\
 	a.Get("/login", Login)
-    a.Get("/dashboard", Dashboard)
+    a.Get("/dashboard", cfg.Dashboard)
+    a.Get("/postform", PostForm)
+    a.Get("/editform", cfg.EditForm)
+    a.Get("/viewitem", cfg.ViewData)
+    a.Get("/deleteprompt", cfg.DeletePrompt)
+
 
 	return r
 }

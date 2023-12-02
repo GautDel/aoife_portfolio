@@ -1,34 +1,41 @@
 {{define "dataItem"}}
-<div class="flex justify-between 
+<div  hx-get="/admin/viewitem" name={{.ID}} hx-trigger="click target:.cde" hx-target="body" hx-swap="beforeend" 
+class="flex justify-between 
+cde
 text-slate-800
 w-[90%] h-[3rem]
 rounded-sm
 drop-shadow-md
 overflow-hidden
-mx-auto my-4
+mx-auto my-4 lg:my-6
 cursor-pointer
 px-4
-bg-white">
+bg-white hover:bg-neutral-100">
 
-    <p class="text-sm text-blue-600 font-bold
-    my-auto">Hero Text</p>
+    <p class="text-[10px] md:text-sm text-blue-600 font-bold
+    cde
+    my-auto">{{.Name}}</p>
 
-    <p class="text-sm truncate text-slate-800 font-light
+    <p class="text-[10px] md:text-sm truncate text-slate-800 font-light
+    cde
     w-[20%]
-    my-auto">My name is Aoife, and I love cats. Hire me because I'm cool!</p>
-    <p class="text-sm text-slate-800 font-semibold 
-    my-auto">hero-text</p>
+    my-auto">{{.Content}}</p>
+    <p class="text-[10px] md:text-sm text-slate-800 font-semibold 
+    cde
+    my-auto">{{.Placement}}</p>
     <div class="flex
     my-auto">
-        <button class="rounded-l-full 
-            text-sm text-white font-bold
-            w-16
+        <button id="edit-button" name={{.ID}} hx-get="/admin/editform" hx-trigger="click target:#edit-button" 
+            class="rounded-l-full 
+            text-[10px] md:text-sm text-white font-bold md:font-semibold
+            w-12 md:w-14 lg:w-16
             py-[0.2rem] mr-0
             drop-shadow-md
             bg-yellow-400 hover:bg-yellow-500">EDIT</button>
-        <button class="rounded-r-full 
-            text-sm text-white font-bold
-            w-16
+        <button id="delete-button" name={{.ID}} hx-get="/admin/deleteprompt" hx-trigger="click target:#delete-button" 
+            class="rounded-r-full 
+            text-[10px] md:text-sm text-white font-bold md:font-semibold
+            w-12 md:w-14 lg:w-16
             py-[0.1rem] pr-1
             drop-shadow-md
             bg-red-500 hover:bg-red-600">DELETE</button>

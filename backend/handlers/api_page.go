@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+    "github.com/google/uuid"
 )
 
 ////// GET ALL PAGES \\\\\\
@@ -20,7 +21,13 @@ func (c *config) GetPages(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(os.Stderr, "Cannot retrieve pages %v", err)
 	}
 
-    fmt.Println(pages)
+    w.Header().Set("Content-Type", "application/json")
+    jsonErr := json.NewEncoder(w).Encode(pages)
+    if jsonErr != nil {
+        fmt.Printf("Couldn't parse JSON, %v", jsonErr) 
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+    }
+    
 }
 
 ////// CREATE A PAGE \\\\\\
@@ -41,13 +48,14 @@ func (c *config) CreatePage(w http.ResponseWriter, r *http.Request) {
 	q := queries.New(c.DB)
 
 	page, err := q.CreatePage(ctx, queries.CreatePageParams{
+        ID: uuid.New(),
 		Name:      params.Name,
 		ItemOrder: params.ItemOrder,
 		ItemShow:  params.ItemShow,
 	})
 
 	if err != nil {
-		fmt.Println("Couldn't create page %v", err)
+		fmt.Printf("Couldn't create page %v", err)
 	}
 
     fmt.Println(page)
@@ -61,6 +69,7 @@ func (c *config) UpdatePage(w http.ResponseWriter, r *http.Request) {
 		Name      string `json:"name"`
 		ItemOrder int32  `json:"item_order"`
 		ItemShow  bool   `json:"item_show"`
+        TabColor  string  `json:"tab_color"`
 		Name_2    string `json:"name_2"`
 	}
 
@@ -80,11 +89,12 @@ func (c *config) UpdatePage(w http.ResponseWriter, r *http.Request) {
 		Name:      params.Name,
 		ItemOrder: params.ItemOrder,
 		ItemShow:  params.ItemShow,
+        TabColor:  params.TabColor,
 		Name_2:    params.Name_2,
 	})
 
 	if err != nil {
-		fmt.Println("Couldn't update page %v", err)
+		fmt.Printf("Couldn't update page %v", err)
 	}
 
     fmt.Println(page)

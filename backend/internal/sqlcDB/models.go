@@ -7,18 +7,27 @@ package queries
 import (
 	"time"
 
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/google/uuid"
 )
 
+type Item struct {
+	ID        uuid.UUID
+	Name      string
+	Placement string
+	Content   string
+	Page      string
+}
+
 type Page struct {
-	ID        pgtype.UUID
+	ID        uuid.UUID
 	Name      string
 	ItemShow  bool
 	ItemOrder int32
+	TabColor  string
 }
 
 type User struct {
-	ID        pgtype.UUID
+	ID        uuid.UUID
 	Username  string
 	Password  string
 	CreatedAt time.Time
